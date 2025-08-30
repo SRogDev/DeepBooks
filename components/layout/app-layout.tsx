@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { usePathname } from "next/navigation"
 import { TopBar } from "./top-bar"
 import { BottomBar } from "./bottom-bar"
@@ -20,29 +19,29 @@ export function AppLayout({ children }: AppLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="min-h-screen flex lg:flex-row flex-col">
       {/* Desktop Sidebar */}
-      <div className="desktop-sidebar">
+      <aside className="hidden lg:block">
         <DesktopSidebar />
-      </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col lg:ml-64 relative"> {/* Añadido relative aquí */}
+      <div className="flex-1 flex flex-col lg:ml-64 relative w-full min-w-0">
         {/* Mobile Top Bar */}
-        <div className="lg:hidden">
+        <header className="lg:hidden fixed z-50 w-full">
           <TopBar />
-        </div>
-
-        {/* Content */}
-        <main className="flex-1">{children}</main> {/* Eliminado pb-16 */}
-
-        {/* Mobile Bottom Bar - MOVIDO FUERA del contenedor flex */}
+        </header>
+        {/* Content, padding-bottom solo en móvil */}
+        <main className="flex-1 w-full pb-16 lg:pb-0">
+          {children}
+        </main>
       </div>
 
-      {/* BottomBar AHORA ESTÁ FUERA de la estructura flex */}
+      {/* Mobile Bottom Bar */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50">
         <BottomBar />
       </div>
     </div>
   )
 }
+
