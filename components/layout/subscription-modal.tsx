@@ -36,7 +36,7 @@ export function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">Elige tu Plan de Lectura</DialogTitle>
-          <DialogDescription className="text-center">Desbloquea todo el potencial de PrismaBook</DialogDescription>
+          <DialogDescription className="text-center">Desbloquea todo el potencial de DeepBooks</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-6 py-6 md:grid-cols-3">

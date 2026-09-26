@@ -8,7 +8,7 @@ import { AppLayout } from "@/components/layout/app-layout"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "PrismaBook - Explore Your Imagination",
+  title: "DeepBooks \u007c Nuevas formas de vivir los libros",
   description: "Una plataforma de lectura inmersiva para explorar mundos infinitos",
   keywords: ["lectura", "libros", "ebooks", "literatura"],
     generator: 'v0.dev'

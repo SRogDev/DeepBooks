@@ -37,7 +37,7 @@ export const useUserStore = create<UserState>()(
       user: {
         id: "1",
         name: "Usuario Demo",
-        email: "demo@prismabook.com",
+        email: "demo@deepbooks.app",
         avatar: "/placeholder.svg?height=100&width=100",
         isCreator: false,
         stats: {

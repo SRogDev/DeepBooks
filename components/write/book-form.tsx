@@ -207,7 +207,7 @@ export function BookForm() {
                 placeholder="0.00"
               />
               <p className="text-xs text-muted-foreground">
-                Comprar libros en PrismaBook es opcional. Los usuarios siempre pueden leer gratis con sus páginas
+                Comprar libros en DeepBooks es opcional. Los usuarios siempre pueden leer gratis con sus páginas
                 disponibles.
               </p>
             </div>

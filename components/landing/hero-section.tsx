@@ -36,7 +36,7 @@ export function HeroSection() {
           className="mb-8 inline-flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-2"
         >
           <BookOpen className="h-5 w-5 text-primary" />
-          <span className="text-sm font-medium text-primary">PrismaBook</span>
+          <span className="text-sm font-medium text-primary">DeepBooks</span>
         </motion.div>
 
         <motion.h1

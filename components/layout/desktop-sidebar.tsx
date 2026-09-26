@@ -78,7 +78,7 @@ export function DesktopSidebar() {
         {/* Footer */}
         <div className="p-4 border-t">
           <div className="text-xs text-muted-foreground text-center">
-            <p>PrismaBook v1.0</p>
+            <p>DeepBooks v1.0</p>
             <p>Explora tu imaginación</p>
           </div>
         </div>
