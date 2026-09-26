@@ -36,3 +36,33 @@ export async function GET(_req: Request, { params }: RouteParams) {
     sections: (secRes.data ?? []) as SectionRow[],
   })
 }
+
+/** PATCH /api/books/[id] — persiste la posición de lectura (sección). */
+export async function PATCH(req: Request, { params }: RouteParams) {
+  const { id } = await params
+  const sb = getServerClient()
+  if (!sb) return missingSupabaseResponse()
+
+  const body = (await req.json().catch(() => null)) as {
+    last_section_idx?: unknown
+  } | null
+  const idx = body?.last_section_idx
+  if (!Number.isInteger(idx) || (idx as number) < 0) {
+    return Response.json(
+      { error: "last_section_idx inválido." },
+      { status: 400 },
+    )
+  }
+
+  const { error } = await sb
+    .from("books")
+    .update({ last_section_idx: idx as number })
+    .eq("id", id)
+  if (error) {
+    return Response.json(
+      { error: `Error guardando posición: ${error.message}` },
+      { status: 500 },
+    )
+  }
+  return Response.json({ ok: true })
+}

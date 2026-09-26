@@ -1,11 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import type { Book } from "@/lib/stores/books-store"
 import { motion } from "framer-motion"
 
 interface BookCoverProps {
-  book: Book
+  book: {
+    cover: string
+    title: string
+  }
 }
 
 export function BookCover({ book }: BookCoverProps) {

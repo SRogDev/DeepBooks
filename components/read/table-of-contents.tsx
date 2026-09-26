@@ -5,20 +5,20 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { motion } from "framer-motion"
 
-interface Chapter {
+interface SectionItem {
   id: string
   title: string
-  page: number
+  index: number
 }
 
 interface TableOfContentsProps {
-  chapters: Chapter[]
-  currentPage: number
+  sections: SectionItem[]
+  currentIndex: number
   onClose: () => void
-  onNavigate: (page: number) => void
+  onNavigate: (index: number) => void
 }
 
-export function TableOfContents({ chapters, currentPage, onClose, onNavigate }: TableOfContentsProps) {
+export function TableOfContents({ sections, currentIndex, onClose, onNavigate }: TableOfContentsProps) {
   return (
     <motion.div
       initial={{ x: -300, opacity: 0 }}
@@ -39,22 +39,24 @@ export function TableOfContents({ chapters, currentPage, onClose, onNavigate }: 
 
       <ScrollArea className="h-full pb-16">
         <div className="p-4 space-y-2">
-          {chapters.map((chapter, index) => (
+          {sections.map((section, i) => (
             <motion.button
-              key={chapter.id}
+              key={section.id}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.05 }}
-              onClick={() => onNavigate(chapter.page)}
+              transition={{ delay: i * 0.05 }}
+              onClick={() => onNavigate(section.index)}
               className={`w-full text-left p-3 rounded-lg transition-colors hover:bg-muted ${
-                currentPage >= chapter.page && (index === chapters.length - 1 || currentPage < chapters[index + 1].page)
+                currentIndex === section.index
                   ? "bg-primary/10 border border-primary/20"
                   : ""
               }`}
             >
-              <div className="flex items-center justify-between">
-                <span className="font-medium">{chapter.title}</span>
-                <span className="text-sm text-muted-foreground">p. {chapter.page}</span>
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium line-clamp-2">{section.title}</span>
+                <span className="shrink-0 text-sm text-muted-foreground">
+                  {section.index + 1}
+                </span>
               </div>
             </motion.button>
           ))}
