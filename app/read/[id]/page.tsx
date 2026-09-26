@@ -1,11 +1,12 @@
 import { BookReader } from "@/components/read/book-reader"
 
 interface ReadPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export default function ReadPage({ params }: ReadPageProps) {
-  return <BookReader bookId={params.id} />
+export default async function ReadPage({ params }: ReadPageProps) {
+  const { id } = await params
+  return <BookReader bookId={id} />
 }

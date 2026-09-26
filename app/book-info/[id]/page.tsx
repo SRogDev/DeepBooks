@@ -1,11 +1,12 @@
 import { BookInfoContent } from "@/components/book-info/book-info-content"
 
 interface BookInfoPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export default function BookInfoPage({ params }: BookInfoPageProps) {
-  return <BookInfoContent bookId={params.id} />
+export default async function BookInfoPage({ params }: BookInfoPageProps) {
+  const { id } = await params
+  return <BookInfoContent bookId={id} />
 }
