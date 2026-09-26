@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { getOrCreateDeviceId } from "@/lib/identity"
 
 type Status = "idle" | "uploading" | "done" | "error"
 
@@ -58,6 +59,7 @@ export function UploadDialog({ open, onOpenChange, onUploaded }: UploadDialogPro
       form.append("file", file)
       if (title.trim()) form.append("title", title.trim())
       if (author.trim()) form.append("author", author.trim())
+      form.append("ownerId", getOrCreateDeviceId())
       const res = await fetch("/api/ingest", { method: "POST", body: form })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error ?? "Error en la ingesta")

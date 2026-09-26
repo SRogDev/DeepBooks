@@ -13,6 +13,8 @@ export interface IngestInput {
   filename: string
   title?: string
   author?: string
+  /** Id de dispositivo del dueño (MVP sin auth; post-MVP: auth user). */
+  ownerId?: string
 }
 
 export interface IngestResult {
@@ -51,7 +53,13 @@ export async function ingestDocument(
 
   const bookRes = await sb
     .from("books")
-    .insert({ title, author, source_type: "upload", language: "es" })
+    .insert({
+      title,
+      author,
+      source_type: "upload",
+      language: "es",
+      owner_id: input.ownerId ?? null,
+    })
     .select("id")
     .single()
   const book = bookRes.data as { id: string } | null

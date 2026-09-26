@@ -56,6 +56,11 @@ export async function POST(req: NextRequest) {
 
   const title = form.get("title")
   const author = form.get("author")
+  const rawOwner = form.get("ownerId")
+  const ownerId =
+    typeof rawOwner === "string" && rawOwner.trim().length > 0 && rawOwner.length <= 128
+      ? rawOwner.trim()
+      : undefined
 
   try {
     const buffer = Buffer.from(await file.arrayBuffer())
@@ -64,6 +69,7 @@ export async function POST(req: NextRequest) {
       filename: file.name,
       title: typeof title === "string" ? title : undefined,
       author: typeof author === "string" ? author : undefined,
+      ownerId,
     })
     return Response.json(result, { status: 201 })
   } catch (err) {
