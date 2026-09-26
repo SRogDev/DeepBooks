@@ -5,6 +5,10 @@ import { Menu, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TableOfContents } from "./table-of-contents"
 import { GeneratePanel } from "./generate-panel"
+import { AmbientMomentCard } from "./ambient-moment-card"
+import { useAmbientTrigger } from "@/lib/ambient/use-ambient-trigger"
+import { FEATURE_AMBIENT } from "@/lib/flags"
+import type { AmbientIntensity } from "@/lib/ambient/trigger"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Section {
@@ -19,6 +23,7 @@ interface BookDetail {
   title: string
   author: string | null
   last_section_idx: number
+  ambient_intensity: AmbientIntensity
 }
 
 interface BookReaderProps {
@@ -113,6 +118,16 @@ export function BookReader({ bookId }: BookReaderProps) {
   const section = sections[currentIdx]
   const paragraphs = section.text.split(/\n+/).filter((p) => p.trim())
 
+  // Momentos ambientales: solo en límites seguros o pausas (Fase 3).
+  const { moment: ambientMoment, dismiss: dismissAmbient } =
+    useAmbientTrigger({
+      bookId,
+      sectionId: section.id,
+      sectionIdx: currentIdx,
+      intensity: book.ambient_intensity ?? "off",
+      scrollContainerRef: contentRef,
+    })
+
   return (
     <div className="relative h-screen bg-background">
       {/* Header */}
@@ -198,6 +213,21 @@ export function BookReader({ bookId }: BookReaderProps) {
         sectionTitle={section.title}
         totalSections={sections.length}
       />
+
+      {/* Ambient moment (non-blocking surprise) */}
+      {FEATURE_AMBIENT && (
+        <AnimatePresence>
+          {ambientMoment && (
+            <AmbientMomentCard
+              key={ambientMoment.id}
+              bookId={bookId}
+              text={ambientMoment.text}
+              label={ambientMoment.label}
+              onDismiss={dismissAmbient}
+            />
+          )}
+        </AnimatePresence>
+      )}
     </div>
   )
 }
