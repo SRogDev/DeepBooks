@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Menu, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TableOfContents } from "./table-of-contents"
+import { GeneratePanel } from "./generate-panel"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Section {
@@ -187,6 +188,16 @@ export function BookReader({ bookId }: BookReaderProps) {
           />
         )}
       </AnimatePresence>
+
+      {/* On-demand generation */}
+      <GeneratePanel
+        key={section.id}
+        bookId={bookId}
+        sectionId={section.id}
+        sectionIdx={currentIdx}
+        sectionTitle={section.title}
+        totalSections={sections.length}
+      />
     </div>
   )
 }
