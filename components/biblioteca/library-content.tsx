@@ -1,24 +1,26 @@
 "use client"
 
-import { useEffect } from "react"
+import Link from "next/link"
+import { Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { useBooksStore } from "@/lib/stores/books-store"
 import { BookBiblio } from "./book-biblio"
-import { generateMockLibrary } from "@/lib/mock-library"
 import { motion } from "framer-motion"
 
 export function LibraryContent() {
-  const { userLibrary, setUserLibrary } = useBooksStore()
-
-  useEffect(() => {
-    // Simular carga de biblioteca del usuario
-    const mockLibrary = generateMockLibrary()
-    setUserLibrary(mockLibrary)
-  }, [setUserLibrary])
+  const { userLibrary } = useBooksStore()
 
   if (userLibrary.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center text-muted-foreground">
-        Tu biblioteca está vacía. ¡Comienza a leer!
+      <div className="flex h-64 flex-col items-center justify-center gap-4 text-center">
+        <p className="text-muted-foreground">Tu biblioteca está vacía.</p>
+        <Button asChild>
+          <Link href="/escribir">
+            <Plus className="mr-2 h-4 w-4" />
+            Agregar documento
+          </Link>
+        </Button>
+        <p className="text-xs text-muted-foreground">PDF, EPUB, DOCX, TXT… cualquier formato.</p>
       </div>
     )
   }

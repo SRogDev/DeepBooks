@@ -5,8 +5,7 @@ import { Menu, Flag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TableOfContents } from "./table-of-contents"
 import { ReportModal } from "./report-modal"
-import type { Book } from "@/lib/stores/books-store"
-import { generateMockBooks } from "@/lib/mock-data"
+import { useBooksStore, type Book } from "@/lib/stores/books-store"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface BookReaderProps {
@@ -31,17 +30,21 @@ export function BookReader({ bookId }: BookReaderProps) {
   const [showReport, setShowReport] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
 
+  const { books } = useBooksStore()
+
   useEffect(() => {
-    // Load book data
-    const mockBooks = generateMockBooks()
-    const foundBook = mockBooks.find((b) => b.id === bookId) || mockBooks[0]
-    setBook(foundBook)
-  }, [bookId])
+    // Fase 1: el lector renderizará las secciones normalizadas del backend
+    setBook(books.find((b) => b.id === bookId) || null)
+  }, [bookId, books])
 
   if (!book) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary"></div>
+      <div className="flex h-screen items-center justify-center p-8 text-center">
+        <p className="text-muted-foreground">
+          Este documento aún no está disponible.
+          <br />
+          La ingesta de documentos llega en la Fase 1.
+        </p>
       </div>
     )
   }

@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react"
 import { useSearchStore } from "@/lib/stores/search-store"
 import { SearchResultItem } from "./search-result-item"
-import { generateMockBooks } from "@/lib/mock-data"
+import { useBooksStore } from "@/lib/stores/books-store"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
 
@@ -33,8 +33,8 @@ export function SearchResults({ query }: SearchResultsProps) {
       // Simular búsqueda con delay
       await new Promise((resolve) => setTimeout(resolve, 800))
 
-      // Mock search results - En producción sería una API call
-      const allBooks = generateMockBooks()
+      // Fase 1: la búsqueda vivirá en el backend (pgvector + texto)
+      const { books: allBooks } = useBooksStore.getState()
       const filteredBooks = allBooks.filter(
         (book) =>
           book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

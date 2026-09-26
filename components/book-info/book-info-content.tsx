@@ -8,7 +8,6 @@ import { BookActions } from "./book-actions"
 import { PaymentModal } from "./payment-modal"
 import type { Book } from "@/lib/stores/books-store"
 import { useBooksStore } from "@/lib/stores/books-store"
-import { generateMockBooks } from "@/lib/mock-data"
 import { motion } from "framer-motion"
 
 interface BookInfoContentProps {
@@ -18,14 +17,12 @@ interface BookInfoContentProps {
 export function BookInfoContent({ bookId }: BookInfoContentProps) {
   const [book, setBook] = useState<Book | null>(null)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
-  const { addToLibrary } = useBooksStore()
+  const { addToLibrary, books } = useBooksStore()
 
   useEffect(() => {
-    // Simular carga del libro específico
-    const mockBooks = generateMockBooks()
-    const foundBook = mockBooks.find((b) => b.id === bookId) || mockBooks[0]
-    setBook(foundBook)
-  }, [bookId])
+    // Fase 1: el libro llegará del backend con sus secciones normalizadas
+    setBook(books.find((b) => b.id === bookId) || null)
+  }, [bookId, books])
 
   const handleFreeRead = () => {
     if (book) {
@@ -41,8 +38,8 @@ export function BookInfoContent({ bookId }: BookInfoContentProps) {
 
   if (!book) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary"></div>
+      <div className="flex h-64 items-center justify-center text-center">
+        <p className="text-muted-foreground">Este libro aún no está disponible.</p>
       </div>
     )
   }
