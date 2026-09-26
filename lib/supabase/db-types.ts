@@ -36,3 +36,19 @@ export interface PautaRow {
   content: string
   is_default: boolean
 }
+
+export type MomentoKind = "text" | "image" | "audio" | "branch" | "question"
+export type MomentoOrigin = "on_demand" | "ambient"
+
+export interface MomentoRow {
+  id: string
+  book_id: string
+  user_id: string | null
+  kind: MomentoKind
+  prompt: string | null
+  output_ref: string | null
+  output_text: string | null
+  anchor_section_id: string | null
+  origin: MomentoOrigin
+  created_at: string
+}
