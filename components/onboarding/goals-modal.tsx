@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, Target, PenTool, Heart } from "lucide-react"
+import { ChevronRight, ChevronLeft, Target, PenTool } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,12 +21,11 @@ export function GoalsModal({ isOpen, onClose }: GoalsModalProps) {
   const [goals, setGoals] = useState<UserGoals>({
     reading: { target: 100, current: 0, unit: "pages" },
     writing: { target: 0, current: 0, unit: "stories", isWriterMode: false },
-    community: { target: 50, current: 0, unit: "superlikes" },
   })
   const { setGoals: saveGoals } = useGoalsStore()
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    if (currentStep < 2) {
       setCurrentStep(currentStep + 1)
     } else {
       saveGoals(goals)
@@ -62,12 +61,6 @@ export function GoalsModal({ isOpen, onClose }: GoalsModalProps) {
       description: "¿Planeas escribir contenido?",
       icon: PenTool,
       color: "text-purple-500",
-    },
-    {
-      title: "Meta en Comunidad",
-      description: "¿Cuántos superlikes esperas ganar?",
-      icon: Heart,
-      color: "text-pink-500",
     },
   ]
 
@@ -217,36 +210,7 @@ export function GoalsModal({ isOpen, onClose }: GoalsModalProps) {
               </motion.div>
             )}
 
-            {/* Step 3: Community Goal */}
-            {currentStep === 3 && (
-              <motion.div
-                key="community"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-4"
-              >
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    <div>
-                      <Label htmlFor="community-target">Superlikes por mes</Label>
-                      <Input
-                        id="community-target"
-                        type="number"
-                        value={goals.community.target}
-                        onChange={(e) => updateGoal("community", "target", Number.parseInt(e.target.value) || 0)}
-                        className="mt-2"
-                        placeholder="¿Cuántos superlikes esperas ganar?"
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Los superlikes se ganan cuando tu contenido realmente conecta con la comunidad
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            </AnimatePresence>
 
           {/* Navigation */}
           <div className="flex justify-between">
@@ -255,8 +219,8 @@ export function GoalsModal({ isOpen, onClose }: GoalsModalProps) {
               Atrás
             </Button>
             <Button onClick={handleNext}>
-              {currentStep === 3 ? "Finalizar" : "Siguiente"}
-              {currentStep < 3 && <ChevronRight className="ml-2 h-4 w-4" />}
+              {currentStep === 2 ? "Finalizar" : "Siguiente"}
+              {currentStep < 2 && <ChevronRight className="ml-2 h-4 w-4" />}
             </Button>
           </div>
         </div>

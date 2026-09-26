@@ -13,11 +13,6 @@ export interface UserGoals {
     unit: "stories" | "pages"
     isWriterMode: boolean
   }
-  community: {
-    target: number
-    current: number
-    unit: "superlikes"
-  }
 }
 
 export interface Achievement {

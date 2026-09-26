@@ -4,9 +4,7 @@ import { useState, useEffect } from "react"
 import { Menu, Flag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TableOfContents } from "./table-of-contents"
-import { ImmersionOverlay } from "./immersion-overlay"
 import { ReportModal } from "./report-modal"
-import { useImmersionStore } from "@/lib/stores/immersion-store"
 import type { Book } from "@/lib/stores/books-store"
 import { generateMockBooks } from "@/lib/mock-data"
 import { motion, AnimatePresence } from "framer-motion"
@@ -27,47 +25,18 @@ const mockChapters = [
   { id: "ch8", title: "El Final", page: 120 },
 ]
 
-// Mock immersions for current page
-const mockImmersions = [
-  {
-    id: "imm1",
-    page: 1,
-    type: "imagen" as const,
-    content: "landscape",
-    position: { x: 20, y: 30 },
-  },
-  {
-    id: "imm2",
-    page: 1,
-    type: "soundtrack" as const,
-    content: "ambient",
-    position: { x: 70, y: 60 },
-  },
-  {
-    id: "imm3",
-    page: 1,
-    type: "reflexion" as const,
-    content: "thought",
-    position: { x: 45, y: 80 },
-  },
-]
-
 export function BookReader({ bookId }: BookReaderProps) {
   const [book, setBook] = useState<Book | null>(null)
   const [showTOC, setShowTOC] = useState(false)
   const [showReport, setShowReport] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const { setImmersions } = useImmersionStore()
 
   useEffect(() => {
     // Load book data
     const mockBooks = generateMockBooks()
     const foundBook = mockBooks.find((b) => b.id === bookId) || mockBooks[0]
     setBook(foundBook)
-
-    // Load immersions for current page
-    setImmersions(mockImmersions)
-  }, [bookId, setImmersions])
+  }, [bookId])
 
   if (!book) {
     return (
@@ -125,8 +94,6 @@ export function BookReader({ bookId }: BookReaderProps) {
             </div>
           </div>
 
-          {/* Immersion Overlay */}
-          <ImmersionOverlay />
         </motion.div>
       </div>
 

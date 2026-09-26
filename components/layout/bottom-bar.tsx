@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Library, Users, PenTool, User } from "lucide-react"
+import { Home, Library, PenTool, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useUserStore } from "@/lib/stores/user-store"
 import { motion } from "framer-motion"
@@ -15,7 +15,6 @@ export function BottomBar() {
   const baseNavItems = [
     { href: "/home", icon: Home, label: "Inicio" },
     { href: "/biblioteca", icon: Library, label: "Biblioteca" },
-    { href: "/comunidad", icon: Users, label: "Comunidad" }
   ]
 
   const navItems = user?.isCreator
