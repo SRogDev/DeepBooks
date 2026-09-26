@@ -55,12 +55,14 @@ export function buildSystemPrompt(
 
 /**
  * Mensaje del lector: petición libre + sección ancla (posición de lectura)
- * + fragmentos RAG del libro.
+ * + fragmentos RAG del libro. `requestLabel` permite reutilizarlo para
+ * momentos ambientales, donde no hay petición del lector sino sorpresa.
  */
 export function buildUserMessage(
   userPrompt: string,
   anchor: AnchorSection | null,
   context: ContextChunk[],
+  requestLabel = "Petición del lector",
 ): string {
   const parts: string[] = []
   if (anchor) {
@@ -82,7 +84,7 @@ export function buildUserMessage(
     }
     parts.push("")
   }
-  parts.push(`Petición del lector: ${userPrompt.trim()}`)
+  parts.push(`${requestLabel}: ${userPrompt.trim()}`)
   return parts.join("\n")
 }
 

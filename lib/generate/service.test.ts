@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest"
 import {
+  generateAmbient,
   generateOnDemand,
   NotFoundError,
   type GenerateServiceDeps,
@@ -89,6 +90,70 @@ describe("generateOnDemand", () => {
     await expect(
       generateOnDemand({ bookId: "book-1", prompt: "hola" }, deps),
     ).rejects.toThrow("429")
+    expect(deps.saveMomento).not.toHaveBeenCalled()
+  })
+})
+
+describe("generateAmbient", () => {
+  const item = {
+    kind: "branch" as const,
+    label: "Escena alternativa",
+    prompt: "Reimagina la escena desde otro punto de vista.",
+  }
+
+  it("genera una sorpresa sin prompt del lector y la guarda con origin ambient", async () => {
+    const deps = makeDeps()
+    const result = await generateAmbient(
+      { bookId: "book-1", sectionId: "sec-1", item },
+      deps,
+    )
+
+    expect(result).toEqual({
+      momentoId: "mom-1",
+      text: "Texto generado.",
+      kind: "branch",
+    })
+
+    // El embedding se calcula sobre la consigna del bank, no un prompt libre
+    expect(deps.embedQuery).toHaveBeenCalledWith(item.prompt)
+
+    // El system prompt sigue llevando las pautas del libro
+    const chat = deps.chat as ReturnType<typeof vi.fn>
+    const [system, user] = chat.mock.calls[0] as [string, string]
+    expect(system).toContain("Tono poético.")
+    expect(system).toContain("Moby Dick")
+    // …pero el mensaje no dice "Petición del lector" (no hay lector pidiendo)
+    expect(user).not.toContain("Petición del lector")
+    expect(user).toContain(item.prompt)
+    expect(user).toContain("Llamadme Ismael")
+
+    const save = deps.saveMomento as ReturnType<typeof vi.fn>
+    expect(save).toHaveBeenCalledWith({
+      bookId: "book-1",
+      prompt: item.prompt,
+      text: "Texto generado.",
+      sectionId: "sec-1",
+      kind: "branch",
+      origin: "ambient",
+    })
+  })
+
+  it("lanza NotFoundError si el libro no existe", async () => {
+    const deps = makeDeps({ loadContext: vi.fn(async () => null) })
+    await expect(
+      generateAmbient({ bookId: "nope", item }, deps),
+    ).rejects.toBeInstanceOf(NotFoundError)
+  })
+
+  it("propaga el error del chat sin guardar el momento", async () => {
+    const deps = makeDeps({
+      chat: vi.fn(async () => {
+        throw new Error("OpenRouter chat falló (502)")
+      }),
+    })
+    await expect(
+      generateAmbient({ bookId: "book-1", item }, deps),
+    ).rejects.toThrow("502")
     expect(deps.saveMomento).not.toHaveBeenCalled()
   })
 })

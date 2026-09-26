@@ -11,6 +11,8 @@ import {
   type ContextChunk,
   type GenerateInput,
 } from "./engine"
+import type { AmbientPromptItem } from "@/lib/ambient/prompts"
+import type { MomentoKind, MomentoOrigin } from "@/lib/supabase/db-types"
 
 export class NotFoundError extends Error {}
 
@@ -27,6 +29,8 @@ export interface SaveMomentoInput {
   prompt: string
   text: string
   sectionId?: string
+  kind?: MomentoKind
+  origin?: MomentoOrigin
 }
 
 export interface GenerateServiceDeps {
@@ -71,4 +75,51 @@ export async function generateOnDemand(
     sectionId: input.sectionId,
   })
   return { momentoId, text }
+}
+
+export interface AmbientInput {
+  bookId: string
+  sectionId?: string
+  /** Consigna creativa elegida del bank (el lector no la ve de antemano). */
+  item: AmbientPromptItem
+}
+
+export interface AmbientResult extends GenerateResult {
+  kind: MomentoKind
+}
+
+/**
+ * Genera un Momento ambiental: sorpresa sin prompt del lector.
+ * Misma tubería que on-demand (pautas como system prompt + RAG + LLM),
+ * pero la consigna viene del bank interno de ideas creativas y el
+ * artefacto se guarda con origin 'ambient'.
+ */
+export async function generateAmbient(
+  input: AmbientInput,
+  deps: GenerateServiceDeps,
+): Promise<AmbientResult> {
+  const ctx = await deps.loadContext(input.bookId, input.sectionId)
+  if (!ctx) throw new NotFoundError("Libro no encontrado.")
+
+  const embedding = await deps.embedQuery(input.item.prompt)
+  const chunks = await deps.findChunks(input.bookId, embedding, RETRIEVAL_K)
+
+  const system = buildSystemPrompt(ctx.pautas, ctx.title, ctx.author)
+  const user = buildUserMessage(
+    input.item.prompt,
+    ctx.anchor,
+    chunks,
+    `Sorpresa para el lector (${input.item.label.toLowerCase()})`,
+  )
+  const text = await deps.chat(system, user)
+
+  const momentoId = await deps.saveMomento({
+    bookId: input.bookId,
+    prompt: input.item.prompt,
+    text,
+    sectionId: input.sectionId,
+    kind: input.item.kind,
+    origin: "ambient",
+  })
+  return { momentoId, text, kind: input.item.kind }
 }

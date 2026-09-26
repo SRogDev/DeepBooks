@@ -156,3 +156,21 @@ describe("validateGenerateBody", () => {
     if (r.ok) expect(r.value.sectionId).toBeUndefined()
   })
 })
+
+describe("buildUserMessage con etiqueta personalizada", () => {
+  it("usa la etiqueta dada en lugar de 'Petición del lector'", () => {
+    const msg = buildUserMessage(
+      "Sorpréndeme",
+      null,
+      [],
+      "Sorpresa para el lector (escena alternativa)",
+    )
+    expect(msg).toContain("Sorpresa para el lector (escena alternativa):")
+    expect(msg).not.toContain("Petición del lector")
+  })
+
+  it("mantiene el comportamiento por defecto sin etiqueta", () => {
+    const msg = buildUserMessage("Hola", null, [])
+    expect(msg).toContain("Petición del lector: Hola")
+  })
+})
