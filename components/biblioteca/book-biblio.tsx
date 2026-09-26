@@ -2,14 +2,23 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import type { Book } from "@/lib/stores/books-store"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { motion } from "framer-motion"
 
+/** Libro tal como lo devuelve /api/books (sin datos inventados). */
+export interface LibraryBook {
+  id: string
+  title: string
+  author: string
+  cover: string
+  readingProgress?: number
+  isPurchased?: boolean
+}
+
 interface BookBiblioProps {
-  book: Book
+  book: LibraryBook
 }
 
 export function BookBiblio({ book }: BookBiblioProps) {
