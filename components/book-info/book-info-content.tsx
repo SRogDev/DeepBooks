@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { BookOpen, AlertCircle, FileText } from "lucide-react"
 import { BookCover } from "./book-cover"
+import { AmbientIntensityControl } from "./ambient-intensity-control"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import type { AmbientIntensity } from "@/lib/ambient/trigger"
 
 interface BookInfoContentProps {
   bookId: string
@@ -17,6 +19,7 @@ interface BookDetail {
   author: string | null
   cover_url: string | null
   created_at: string
+  ambient_intensity: AmbientIntensity
 }
 
 export function BookInfoContent({ bookId }: BookInfoContentProps) {
@@ -96,6 +99,10 @@ export function BookInfoContent({ bookId }: BookInfoContentProps) {
           Leer ahora
         </Link>
       </Button>
+      <AmbientIntensityControl
+        bookId={book.id}
+        initial={book.ambient_intensity ?? "off"}
+      />
     </motion.div>
   )
 }
