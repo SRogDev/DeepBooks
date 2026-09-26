@@ -3,15 +3,10 @@ import { parseDocument } from "./parsers"
 import { chunkText } from "./chunker"
 import { embedTexts } from "./embeddings"
 
-/**
- * Pautas por defecto ("Modo DeepBooks"): la ingesta inserta esta fila en
- * `pautas` por cada libro. El editor de pautas (Fase 2) la reemplazará.
- */
-export const DEFAULT_PAUTAS =
-  "Modo DeepBooks: acompaña la lectura con momentos generativos sutiles. " +
-  "Visualiza escenas vívidas cuando el texto lo pida, haz preguntas que inviten " +
-  "a reflexionar sin revelar giros futuros, y mantén un tono cercano y curioso. " +
-  "Nunca interrumpas a mitad de una escena: actúa en pausas naturales."
+// La fuente de verdad vive en lib/pautas.ts (importable desde cliente sin
+// pdf-parse); se re-exporta para no romper importadores existentes.
+import { DEFAULT_PAUTAS } from "@/lib/pautas"
+export { DEFAULT_PAUTAS }
 
 export interface IngestInput {
   file: Buffer
