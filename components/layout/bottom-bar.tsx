@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Library, PenTool, User } from "lucide-react"
+import { Home, Library, PenTool, Store, User } from "lucide-react"
+import { FEATURE_MARKETPLACE } from "@/lib/flags"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useUserStore } from "@/lib/stores/user-store"
 import { motion } from "framer-motion"
@@ -17,9 +18,14 @@ export function BottomBar() {
     { href: "/biblioteca", icon: Library, label: "Biblioteca" },
   ]
 
-  const navItems = user?.isCreator
-    ? [...baseNavItems, { href: "/gestion", icon: PenTool, label: "Escribir" }]
-    : baseNavItems
+  const navItems = [
+    ...(user?.isCreator
+      ? [...baseNavItems, { href: "/gestion", icon: PenTool, label: "Escribir" }]
+      : baseNavItems),
+    ...(FEATURE_MARKETPLACE
+      ? [{ href: "/mercado", icon: Store, label: "Mercado" }]
+      : []),
+  ]
 
   return (
     <motion.nav

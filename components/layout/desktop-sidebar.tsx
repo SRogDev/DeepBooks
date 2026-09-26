@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Library, PenTool, User } from "lucide-react"
+import { Home, Library, PenTool, User, Store } from "lucide-react"
+import { FEATURE_MARKETPLACE } from "@/lib/flags"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useUserStore } from "@/lib/stores/user-store"
 import { motion } from "framer-motion"
@@ -72,6 +73,27 @@ export function DesktopSidebar() {
               )
             })}
           </div>
+
+          {/* Secundario: el mercado no compite con la Biblioteca */}
+          {FEATURE_MARKETPLACE && (
+            <div className="mt-6">
+              <p className="px-3 pb-1 text-xs uppercase tracking-wide text-muted-foreground/70">
+                Descubrir
+              </p>
+              <Link
+                href="/mercado"
+                className={cn(
+                  "flex items-center space-x-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50",
+                  pathname === "/mercado"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <Store className="h-4 w-4" />
+                <span>Mercado</span>
+              </Link>
+            </div>
+          )}
         </nav>
 
         {/* Footer */}

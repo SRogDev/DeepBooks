@@ -5,6 +5,8 @@ import Link from "next/link"
 import { BookOpen, AlertCircle, FileText } from "lucide-react"
 import { BookCover } from "./book-cover"
 import { AmbientIntensityControl } from "./ambient-intensity-control"
+import { PublishDialog } from "./publish-dialog"
+import { FEATURE_MARKETPLACE } from "@/lib/flags"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import type { AmbientIntensity } from "@/lib/ambient/trigger"
@@ -103,6 +105,7 @@ export function BookInfoContent({ bookId }: BookInfoContentProps) {
         bookId={book.id}
         initial={book.ambient_intensity ?? "off"}
       />
+      {FEATURE_MARKETPLACE && <PublishDialog bookId={book.id} />}
     </motion.div>
   )
 }
