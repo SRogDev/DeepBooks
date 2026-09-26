@@ -10,6 +10,8 @@ export interface BookRow {
   cover_url: string | null
   language: string
   last_section_idx: number
+  ambient_intensity: "off" | "suave" | "activo"
+  last_ambient_at: string | null
   created_at: string
 }
 
