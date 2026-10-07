@@ -53,3 +53,7 @@ deepbooks/
 ## License
 
 No license file yet.
+
+## Landing
+
+The public landing (`/`) is a dark editorial showcase of the real product: how ingestion → pautas → RAG generation → ambient moments work, the feature set, and the open-source architecture. No fabricated stats — everything on the page maps to implemented code.
