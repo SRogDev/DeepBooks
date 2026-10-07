@@ -92,3 +92,8 @@
     display: block;
   }
 }
+
+/* Landing display font (Playfair Display via next/font variable) */
+.font-display {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
+}
