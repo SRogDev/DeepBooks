@@ -26,7 +26,7 @@
 
 ## Stack
 
-Next.js 15 (App Router) · TypeScript · Tailwind CSS · Supabase (Postgres + pgvector + RLS) · OpenRouter (embeddings + generation) · Vitest
+Next.js 16.4 (App Router) · TypeScript · Tailwind CSS · Supabase (Postgres + pgvector + RLS) · OpenRouter (embeddings + generation) · Vitest
 
 ## Setup
 
