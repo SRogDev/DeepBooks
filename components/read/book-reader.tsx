@@ -85,6 +85,19 @@ export function BookReader({ bookId }: BookReaderProps) {
     },
     [bookId],
   )
+  // Hooks must run before any early return (React error #310 otherwise:
+  // the loading render runs fewer hooks than the loaded render, so the
+  // reader crashes in production for ANY book, with real data too).
+  // While loading, book is null so intensity is "off" and the hook is inert.
+  const section = sections[currentIdx]
+  const { moment: ambientMoment, dismiss: dismissAmbient } =
+    useAmbientTrigger({
+      bookId,
+      sectionId: section?.id ?? "",
+      sectionIdx: currentIdx,
+      intensity: book?.ambient_intensity ?? "off",
+      scrollContainerRef: contentRef,
+    })
 
   if (loading) {
     return (
@@ -115,18 +128,7 @@ export function BookReader({ bookId }: BookReaderProps) {
     )
   }
 
-  const section = sections[currentIdx]
   const paragraphs = section.text.split(/\n+/).filter((p) => p.trim())
-
-  // Momentos ambientales: solo en límites seguros o pausas (Fase 3).
-  const { moment: ambientMoment, dismiss: dismissAmbient } =
-    useAmbientTrigger({
-      bookId,
-      sectionId: section.id,
-      sectionIdx: currentIdx,
-      intensity: book.ambient_intensity ?? "off",
-      scrollContainerRef: contentRef,
-    })
 
   return (
     <div className="relative h-screen bg-background">
